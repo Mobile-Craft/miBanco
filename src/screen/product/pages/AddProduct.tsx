@@ -26,7 +26,6 @@ export const AddProduct = () => {
   const handleSubmit = () => {
     if (validateForm()) {
       console.log('Form data submitted', formData);
-      // Submit your form logic here
     }
   };
 
