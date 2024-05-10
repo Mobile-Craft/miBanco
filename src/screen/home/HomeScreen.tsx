@@ -1,28 +1,18 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, {FC, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {RootStackScreenProps} from '../../types/stackScreenProps';
 import SearchInput from '../components/SearchInput';
 import Item from '../components/Item';
 import ButtonComponent from '../../shared/components/button/ButtonComponent';
-
-const DATA = [
-  {id: '123455', name: 'moises'},
-  {id: '123456', name: 'jose'},
-  {id: '123457', name: 'elias'},
-  {id: '123458', name: 'Nombre'},
-  {id: '123459', name: 'Nombre'},
-  {id: '123460', name: 'Nombre'},
-  {id: '123463', name: 'Nombre'},
-  {id: '123464', name: 'Nombre'},
-];
+import {useProducts} from '../../shared/hooks/useProducts';
 
 export const HomeScreen: FC<RootStackScreenProps<'Home'>> = ({navigation}) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const handleNavigate = (id: string) => {
-    navigation.navigate('DetailsProduct', {id});
-  };
+  const {products, error} = useProducts();
 
+  const filteredProducts = products.filter(product =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
   return (
     <View style={styles.container}>
       <SearchInput onChange={setSearchQuery} value={searchQuery} />
@@ -30,15 +20,21 @@ export const HomeScreen: FC<RootStackScreenProps<'Home'>> = ({navigation}) => {
       <View style={styles.containerList}>
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={DATA.filter(item =>
-            item.name.toLowerCase().includes(searchQuery.toLowerCase()),
-          )}
-          renderItem={({item, index}) => (
+          data={filteredProducts}
+          renderItem={({item}) => (
             <Item
               name={item.name}
               id={item.id}
-              onPress={handleNavigate}
-              style={{borderBottomWidth: index === DATA.length - 1 ? 0 : 1}}
+              onPress={() => {
+                navigation.navigate('DetailsProduct', {
+                  id: item.id,
+                  name: item.name,
+                  description: item.description,
+                  logo: item.logo,
+                  date_release: item.date_release,
+                  date_revision: item.date_revision,
+                });
+              }}
             />
           )}
           keyExtractor={item => item.id}

@@ -8,8 +8,8 @@ import {
   Platform,
 } from 'react-native';
 import ButtonComponent from '../../../shared/components/button/ButtonComponent';
-import useFormData from '../../../shared/hooks/useFormData';
 import FormField from '../components/FormField';
+import {useProductForm} from '../../../shared/hooks/useProductForm';
 
 export const AddProduct = () => {
   const initialState = {
@@ -17,17 +17,17 @@ export const AddProduct = () => {
     name: '',
     description: '',
     logo: '',
-    releaseDate: '',
-    reviewDate: '',
+    date_release: '',
+    date_revision: '',
   };
-  const {formData, handleInputChange, errors, validateForm, handleReset} =
-    useFormData(initialState);
+  const {formData, handleInputChange, handleSubmit, errors, handleReset} =
+    useProductForm(initialState);
 
-  const handleSubmit = () => {
-    if (validateForm()) {
-      console.log('Form data submitted', formData);
-    }
-  };
+  // const handleSubmit = () => {
+  //   if (validateForm()) {
+  //     console.log('Form data submitted', formData);
+  //   }
+  // };
 
   return (
     <KeyboardAvoidingView
@@ -67,18 +67,18 @@ export const AddProduct = () => {
 
         <FormField
           label="Fecha Liberación"
-          value={formData.releaseDate}
-          onChangeText={text => handleInputChange('releaseDate', text)}
-          error={errors.releaseDate}
+          value={formData.date_release}
+          onChangeText={text => handleInputChange('date_release', text)}
+          error={errors.date_release}
         />
 
         <FormField
           editable={false}
           style={[styles.input, {backgroundColor: '#f6f6f6'}]}
           label="Fecha Revisión"
-          value={formData.reviewDate}
-          onChangeText={text => handleInputChange('reviewDate', text)}
-          error={errors.reviewDate}
+          value={formData.date_revision}
+          onChangeText={text => handleInputChange('date_revision', text)}
+          error={errors.date_revision}
         />
 
         <View style={styles.buttonContainer}>
