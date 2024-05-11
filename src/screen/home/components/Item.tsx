@@ -6,6 +6,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 interface ItemProps {
   name: string;
@@ -15,12 +16,16 @@ interface ItemProps {
 }
 
 const Item: FC<ItemProps> = ({name, id, onPress, style}) => (
-  <TouchableOpacity style={[styles.item, style]} onPress={onPress}>
+  <TouchableOpacity
+    style={[styles.item, style]}
+    onPress={onPress}
+    testID="item-touchable">
     <View>
       <Text style={styles.title}>{name}</Text>
       <Text style={styles.id}>ID: {id}</Text>
     </View>
-    <Text style={styles.arrow}>{'>'}</Text>
+    <Icon name="chevron-forward-outline" size={25} color={'#c9c9c9'} />
+    {/* <Text style={styles.arrow}>{'>'}</Text> */}
   </TouchableOpacity>
 );
 
@@ -42,10 +47,6 @@ const styles = StyleSheet.create({
   id: {
     fontSize: 14,
     color: '#666',
-  },
-  arrow: {
-    fontSize: 18,
-    color: '#000',
   },
 });
 

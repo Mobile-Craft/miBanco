@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {
   ScrollView,
   Text,
@@ -6,12 +6,14 @@ import {
   View,
   KeyboardAvoidingView,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
 import ButtonComponent from '../../../shared/components/button/ButtonComponent';
 import FormField from '../components/FormField';
 import {useProductForm} from '../../../shared/hooks/useProductForm';
 import RNDateTimePicker, {
   DateTimePickerEvent,
+  DateTimePickerAndroid,
 } from '@react-native-community/datetimepicker';
 import {addYears, format} from 'date-fns';
 import {RootStackScreenProps} from '../../../types/stackScreenProps';
@@ -30,17 +32,30 @@ export const AddProduct: FC<RootStackScreenProps<'AddProduct'>> = ({route}) => {
   const {formData, handleInputChange, handleSubmit, errors, handleReset} =
     useProductForm(initialState, isEdit);
 
-  const handleDateChange = (
-    event: DateTimePickerEvent,
-    selectedDate?: Date,
-  ) => {
+  useEffect(() => {
+    const nextYearDate = addYears(
+      new Date(formData.date_release),
+      1,
+    ).toISOString();
+    handleInputChange('date_revision', nextYearDate);
+  }, [formData.date_release]);
+
+  const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = selectedDate || new Date(formData.date_release);
-    if (event.type === 'set') {
-      handleInputChange('date_release', currentDate.toISOString());
-    } else if (event.type === 'dismissed') {
-      const nextYearDate = addYears(new Date(currentDate).toISOString(), 1);
-      handleInputChange('date_revision', nextYearDate);
-    }
+    handleInputChange('date_release', currentDate.toISOString());
+  };
+
+  const showMode = currentMode => {
+    DateTimePickerAndroid.open({
+      value: new Date(formData.date_release),
+      onChange,
+      mode: currentMode,
+      is24Hour: true,
+    });
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
   };
 
   return (
@@ -77,16 +92,25 @@ export const AddProduct: FC<RootStackScreenProps<'AddProduct'>> = ({route}) => {
         />
 
         <FormField
+          testID="input-id"
           label="Logo"
           value={formData.logo}
           onChangeText={text => handleInputChange('logo', text)}
           error={errors.logo}
         />
-        <RNDateTimePicker
-          value={new Date(formData.date_release)}
-          onChange={handleDateChange}
-          minimumDate={new Date()}
-        />
+        {Platform.OS === 'ios' ? (
+          <RNDateTimePicker
+            value={new Date(formData.date_release)}
+            onChange={onChange}
+            minimumDate={new Date()}
+          />
+        ) : (
+          <TouchableOpacity onPress={showDatepicker} style={styles.takeDate}>
+            <Text>
+              Fecha {format(new Date(formData.date_release), 'dd/MM/yyy')}
+            </Text>
+          </TouchableOpacity>
+        )}
 
         <FormField
           editable={false}
@@ -141,5 +165,12 @@ const styles = StyleSheet.create({
   },
   inputBlock: {
     backgroundColor: '#f6f6f6',
+  },
+  takeDate: {
+    padding: 10,
+    backgroundColor: '#e0e0d6',
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    borderRadius: 8,
   },
 });

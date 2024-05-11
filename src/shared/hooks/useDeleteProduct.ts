@@ -18,7 +18,6 @@ export const useDeleteProduct = () => {
         [{text: 'OK', onPress: () => navigation.navigate('Home')}],
       );
     } catch (error) {
-      console.error('Failed to delete product:', error);
       Alert.alert('Error', 'Error al eliminar el producto.');
     } finally {
       setIsDeleting(false);

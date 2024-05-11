@@ -14,6 +14,7 @@ export const InfoSection: FC<InfoSectionProps> = ({label, info}) => (
         source={{uri: info}}
         style={styles.logoPlaceholder}
         resizeMode="contain"
+        testID="logo-image"
       />
     ) : (
       <View style={styles.infoContainerDetails}>

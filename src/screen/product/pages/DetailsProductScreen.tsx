@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-import React, {FC, useCallback, useMemo, useRef} from 'react';
+import React, {
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {InfoSection} from '../components/InfoSection';
 import ButtonComponent from '../../../shared/components/button/ButtonComponent';
@@ -12,14 +19,30 @@ import BottomSheet, {
 import BottomSheetComponent from '../components/BottomSheet';
 import {format} from 'date-fns';
 import {useDeleteProduct} from '../../../shared/hooks/useDeleteProduct';
+import {DetailsSkeleton} from '../components/DetailsSkeleton';
 
 export const DetailsProductScreen: FC<
   RootStackScreenProps<'DetailsProduct'>
 > = ({navigation, route}) => {
   const product = route.params?.product;
+  const [isLoading, setLoading] = useState(true);
   const {deleteProduct} = useDeleteProduct();
   const bottomSheetRef = useRef<BottomSheet>(null);
 
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setTimeout(() => {
+          setLoading(false);
+        }, 500);
+      } catch (error) {
+        console.error('Failed to load data');
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
   const handleOpenSheet = () => {
     bottomSheetRef.current?.expand();
   };
@@ -48,9 +71,18 @@ export const DetailsProductScreen: FC<
     [],
   );
 
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <DetailsSkeleton />
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
-      <Text style={styles.id}>ID: {product.id}</Text>
+      <Text style={styles.id} testID="product-id">
+        ID: {product.id}
+      </Text>
       <Text style={styles.infoExtra}>Información extra</Text>
 
       <InfoSection label={'Nombre'} info={product.name} />
@@ -58,11 +90,11 @@ export const DetailsProductScreen: FC<
       <InfoSection label={'Logo'} info={product.logo} />
       <InfoSection
         label={'Fecha de liberación'}
-        info={format(new Date(product.date_release), 'P')}
+        info={format(new Date(product.date_release), 'dd/MM/yyyy')}
       />
       <InfoSection
         label={'Fecha de revisión'}
-        info={format(new Date(product.date_revision), 'P')}
+        info={format(new Date(product.date_revision), 'dd/MM/yyyy')}
       />
       <View style={styles.containerButton}>
         <ButtonComponent

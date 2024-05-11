@@ -1,50 +1,58 @@
 import React, {FC, useCallback, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {RootStackScreenProps} from '../../types/stackScreenProps';
-import SearchInput from '../components/SearchInput';
-import Item from '../components/Item';
+import SearchInput from './components/SearchInput';
+import Item from './components/Item';
 import ButtonComponent from '../../shared/components/button/ButtonComponent';
 import {useProducts} from '../../shared/hooks/useProducts';
 import {useFocusEffect} from '@react-navigation/native';
+import {HomeSkeleton} from './components/HomeSkeleton';
+import {Product} from '../../services/product/ProductService';
 
 export const HomeScreen: FC<RootStackScreenProps<'Home'>> = ({navigation}) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const {products, refreshProducts, error} = useProducts();
+  const {products, refreshProducts, isLoading} = useProducts();
 
   useFocusEffect(
     useCallback(() => {
-      refreshProducts(); // Llama a una función que recarga los productos
+      refreshProducts();
     }, [refreshProducts]),
   );
   const filteredProducts = products.filter(product =>
     product.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const handleNavigate = product => {
+  const handleNavigate = (product: Product) => {
     navigation.navigate('DetailsProduct', {product});
+  };
+  const handleNavigateAdd = () => {
+    navigation.navigate('AddProduct', {});
   };
   return (
     <View style={styles.container}>
       <SearchInput onChange={setSearchQuery} value={searchQuery} />
-
       <View style={styles.containerList}>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={filteredProducts}
-          renderItem={({item}) => (
-            <Item
-              name={item.name}
-              id={item.id}
-              onPress={() => handleNavigate(item)}
-            />
-          )}
-          keyExtractor={item => item.id}
-        />
+        {isLoading ? (
+          <HomeSkeleton />
+        ) : (
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={filteredProducts}
+            renderItem={({item}) => (
+              <Item
+                name={item.name}
+                id={item.id}
+                onPress={() => handleNavigate(item)}
+              />
+            )}
+            keyExtractor={item => item.id}
+          />
+        )}
       </View>
       <View style={styles.containerButton}>
         <ButtonComponent
           title={'Agregar'}
-          onPress={() => navigation.navigate('AddProduct', {})}
+          onPress={() => handleNavigateAdd()}
           styleType={'primary'}
         />
       </View>
