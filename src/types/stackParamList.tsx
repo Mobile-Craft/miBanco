@@ -1,5 +1,11 @@
+import {Product} from '../services/product/ProductService';
+
 export type RootStackParamList = {
   Home: undefined;
-  DetailsProduct: {id: string};
-  AddProduct: undefined;
+  DetailsProduct: {
+    product: Product;
+  };
+  AddProduct: {
+    product?: Product;
+  };
 };

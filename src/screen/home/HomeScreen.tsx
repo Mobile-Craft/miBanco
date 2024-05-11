@@ -1,28 +1,28 @@
-/* eslint-disable react-native/no-inline-styles */
-import React, {FC, useState} from 'react';
+import React, {FC, useCallback, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {RootStackScreenProps} from '../../types/stackScreenProps';
 import SearchInput from '../components/SearchInput';
 import Item from '../components/Item';
 import ButtonComponent from '../../shared/components/button/ButtonComponent';
-
-const DATA = [
-  {id: '123455', name: 'moises'},
-  {id: '123456', name: 'jose'},
-  {id: '123457', name: 'elias'},
-  {id: '123458', name: 'Nombre'},
-  {id: '123459', name: 'Nombre'},
-  {id: '123460', name: 'Nombre'},
-  {id: '123463', name: 'Nombre'},
-  {id: '123464', name: 'Nombre'},
-];
+import {useProducts} from '../../shared/hooks/useProducts';
+import {useFocusEffect} from '@react-navigation/native';
 
 export const HomeScreen: FC<RootStackScreenProps<'Home'>> = ({navigation}) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const handleNavigate = (id: string) => {
-    navigation.navigate('DetailsProduct', {id});
-  };
+  const {products, refreshProducts, error} = useProducts();
 
+  useFocusEffect(
+    useCallback(() => {
+      refreshProducts(); // Llama a una función que recarga los productos
+    }, [refreshProducts]),
+  );
+  const filteredProducts = products.filter(product =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
+  const handleNavigate = product => {
+    navigation.navigate('DetailsProduct', {product});
+  };
   return (
     <View style={styles.container}>
       <SearchInput onChange={setSearchQuery} value={searchQuery} />
@@ -30,15 +30,12 @@ export const HomeScreen: FC<RootStackScreenProps<'Home'>> = ({navigation}) => {
       <View style={styles.containerList}>
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={DATA.filter(item =>
-            item.name.toLowerCase().includes(searchQuery.toLowerCase()),
-          )}
-          renderItem={({item, index}) => (
+          data={filteredProducts}
+          renderItem={({item}) => (
             <Item
               name={item.name}
               id={item.id}
-              onPress={handleNavigate}
-              style={{borderBottomWidth: index === DATA.length - 1 ? 0 : 1}}
+              onPress={() => handleNavigate(item)}
             />
           )}
           keyExtractor={item => item.id}
@@ -47,7 +44,7 @@ export const HomeScreen: FC<RootStackScreenProps<'Home'>> = ({navigation}) => {
       <View style={styles.containerButton}>
         <ButtonComponent
           title={'Agregar'}
-          onPress={() => navigation.navigate('AddProduct')}
+          onPress={() => navigation.navigate('AddProduct', {})}
           styleType={'primary'}
         />
       </View>

@@ -10,9 +10,17 @@ export const InfoSection: FC<InfoSectionProps> = ({label, info}) => (
   <View style={styles.infoContainer}>
     <Text style={styles.label}>{label}</Text>
     {label === 'Logo' ? (
-      <Image source={{uri: info}} style={styles.logoPlaceholder} />
+      <Image
+        source={{uri: info}}
+        style={styles.logoPlaceholder}
+        resizeMode="contain"
+      />
     ) : (
-      <Text style={styles.info}>{info}</Text>
+      <View style={styles.infoContainerDetails}>
+        <Text numberOfLines={1} style={styles.info}>
+          {info}
+        </Text>
+      </View>
     )}
   </View>
 );
@@ -27,6 +35,10 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     color: '#666',
+  },
+  infoContainerDetails: {
+    width: 160,
+    alignItems: 'flex-end',
   },
   info: {
     fontSize: 16,

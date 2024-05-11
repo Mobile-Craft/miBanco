@@ -10,12 +10,12 @@ import {
 interface ItemProps {
   name: string;
   id: string;
-  onPress: (id: string) => void;
+  onPress(): void;
   style?: ViewStyle;
 }
 
 const Item: FC<ItemProps> = ({name, id, onPress, style}) => (
-  <TouchableOpacity style={[styles.item, style]} onPress={() => onPress(id)}>
+  <TouchableOpacity style={[styles.item, style]} onPress={onPress}>
     <View>
       <Text style={styles.title}>{name}</Text>
       <Text style={styles.id}>ID: {id}</Text>

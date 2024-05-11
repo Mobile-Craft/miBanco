@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {
   ScrollView,
   Text,
@@ -8,24 +8,38 @@ import {
   Platform,
 } from 'react-native';
 import ButtonComponent from '../../../shared/components/button/ButtonComponent';
-import useFormData from '../../../shared/hooks/useFormData';
 import FormField from '../components/FormField';
+import {useProductForm} from '../../../shared/hooks/useProductForm';
+import RNDateTimePicker, {
+  DateTimePickerEvent,
+} from '@react-native-community/datetimepicker';
+import {addYears, format} from 'date-fns';
+import {RootStackScreenProps} from '../../../types/stackScreenProps';
 
-export const AddProduct = () => {
-  const initialState = {
+export const AddProduct: FC<RootStackScreenProps<'AddProduct'>> = ({route}) => {
+  const productToEdit = route.params?.product;
+  const isEdit = Boolean(productToEdit);
+  const initialState = productToEdit || {
     id: '',
     name: '',
     description: '',
     logo: '',
-    releaseDate: '',
-    reviewDate: '',
+    date_release: new Date().toISOString(),
+    date_revision: addYears(new Date().toISOString(), 1),
   };
-  const {formData, handleInputChange, errors, validateForm, handleReset} =
-    useFormData(initialState);
+  const {formData, handleInputChange, handleSubmit, errors, handleReset} =
+    useProductForm(initialState, isEdit);
 
-  const handleSubmit = () => {
-    if (validateForm()) {
-      console.log('Form data submitted', formData);
+  const handleDateChange = (
+    event: DateTimePickerEvent,
+    selectedDate?: Date,
+  ) => {
+    const currentDate = selectedDate || new Date(formData.date_release);
+    if (event.type === 'set') {
+      handleInputChange('date_release', currentDate.toISOString());
+    } else if (event.type === 'dismissed') {
+      const nextYearDate = addYears(new Date(currentDate).toISOString(), 1);
+      handleInputChange('date_revision', nextYearDate);
     }
   };
 
@@ -39,13 +53,16 @@ export const AddProduct = () => {
 
         <FormField
           label="ID"
+          style={[productToEdit && [styles.inputBlock]]}
           value={formData.id}
           onChangeText={text => handleInputChange('id', text)}
           error={errors.id}
+          editable={!productToEdit}
         />
 
         <FormField
           label="Nombre"
+          autoCapitalize="sentences"
           value={formData.name}
           onChangeText={text => handleInputChange('name', text)}
           error={errors.name}
@@ -53,6 +70,7 @@ export const AddProduct = () => {
 
         <FormField
           label="Descripción"
+          autoCapitalize="sentences"
           value={formData.description}
           onChangeText={text => handleInputChange('description', text)}
           error={errors.description}
@@ -64,21 +82,27 @@ export const AddProduct = () => {
           onChangeText={text => handleInputChange('logo', text)}
           error={errors.logo}
         />
-
-        <FormField
-          label="Fecha Liberación"
-          value={formData.releaseDate}
-          onChangeText={text => handleInputChange('releaseDate', text)}
-          error={errors.releaseDate}
+        <RNDateTimePicker
+          value={new Date(formData.date_release)}
+          onChange={handleDateChange}
+          minimumDate={new Date()}
         />
 
         <FormField
           editable={false}
-          style={[styles.input, {backgroundColor: '#f6f6f6'}]}
+          label="Fecha Liberación"
+          value={format(new Date(formData.date_release), 'dd/MM/yyyy')}
+          onChangeText={text => handleInputChange('date_release', text)}
+          error={errors.date_release}
+        />
+
+        <FormField
+          editable={false}
+          style={styles.inputBlock}
           label="Fecha Revisión"
-          value={formData.reviewDate}
-          onChangeText={text => handleInputChange('reviewDate', text)}
-          error={errors.reviewDate}
+          value={format(new Date(formData.date_revision), 'dd/MM/yyyy')}
+          onChangeText={text => handleInputChange('date_revision', text)}
+          error={errors.date_revision}
         />
 
         <View style={styles.buttonContainer}>
@@ -111,15 +135,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
-  input: {
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    padding: 14,
-    marginBottom: 10,
-  },
   buttonContainer: {
     top: 24,
     marginBottom: 120,
+  },
+  inputBlock: {
+    backgroundColor: '#f6f6f6',
   },
 });
