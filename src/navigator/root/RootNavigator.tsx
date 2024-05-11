@@ -9,7 +9,9 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 export const RootNavigator: FC = () => {
   return (
-    <RootStack.Navigator initialRouteName={'Home'}>
+    <RootStack.Navigator
+      initialRouteName={'Home'}
+      screenOptions={{headerBackTitleVisible: false}}>
       <RootStack.Screen
         name="Home"
         component={HomeScreen}
@@ -18,8 +20,13 @@ export const RootNavigator: FC = () => {
       <RootStack.Screen
         name="DetailsProduct"
         component={DetailsProductScreen}
+        options={{headerTitle: 'Detalle'}}
       />
-      <RootStack.Screen name="AddProduct" component={AddProduct} />
+      <RootStack.Screen
+        name="AddProduct"
+        component={AddProduct}
+        options={{headerTitle: 'Nuevo Producto'}}
+      />
     </RootStack.Navigator>
   );
 };

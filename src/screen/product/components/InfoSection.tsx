@@ -10,7 +10,11 @@ export const InfoSection: FC<InfoSectionProps> = ({label, info}) => (
   <View style={styles.infoContainer}>
     <Text style={styles.label}>{label}</Text>
     {label === 'Logo' ? (
-      <Image source={{uri: info}} style={styles.logoPlaceholder} />
+      <Image
+        source={{uri: info}}
+        style={styles.logoPlaceholder}
+        resizeMode="contain"
+      />
     ) : (
       <View style={styles.infoContainerDetails}>
         <Text numberOfLines={1} style={styles.info}>

@@ -5,9 +5,14 @@ import ButtonComponent from '../../../shared/components/button/ButtonComponent';
 interface BottomSheetProps {
   onConfirm: () => void;
   onCancel: () => void;
+  productName: string;
 }
 
-const BottomSheetComponent: FC<BottomSheetProps> = ({onConfirm, onCancel}) => {
+const BottomSheetComponent: FC<BottomSheetProps> = ({
+  onConfirm,
+  onCancel,
+  productName,
+}) => {
   return (
     <>
       <Pressable style={styles.close} onPress={onCancel}>
@@ -16,7 +21,7 @@ const BottomSheetComponent: FC<BottomSheetProps> = ({onConfirm, onCancel}) => {
       <View style={styles.divider} />
       <View style={styles.warningContainer}>
         <Text style={{textAlign: 'center'}}>
-          Estas seguro de eliminar el producto titulo del producto?
+          Estas seguro de eliminar el producto {productName}?
         </Text>
       </View>
       <View style={styles.divider} />

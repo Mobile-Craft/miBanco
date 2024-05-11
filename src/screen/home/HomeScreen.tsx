@@ -1,18 +1,28 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useCallback, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {RootStackScreenProps} from '../../types/stackScreenProps';
 import SearchInput from '../components/SearchInput';
 import Item from '../components/Item';
 import ButtonComponent from '../../shared/components/button/ButtonComponent';
 import {useProducts} from '../../shared/hooks/useProducts';
+import {useFocusEffect} from '@react-navigation/native';
 
 export const HomeScreen: FC<RootStackScreenProps<'Home'>> = ({navigation}) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const {products, error} = useProducts();
+  const {products, refreshProducts, error} = useProducts();
 
+  useFocusEffect(
+    useCallback(() => {
+      refreshProducts(); // Llama a una función que recarga los productos
+    }, [refreshProducts]),
+  );
   const filteredProducts = products.filter(product =>
     product.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
+
+  const handleNavigate = product => {
+    navigation.navigate('DetailsProduct', {product});
+  };
   return (
     <View style={styles.container}>
       <SearchInput onChange={setSearchQuery} value={searchQuery} />
@@ -25,16 +35,7 @@ export const HomeScreen: FC<RootStackScreenProps<'Home'>> = ({navigation}) => {
             <Item
               name={item.name}
               id={item.id}
-              onPress={() => {
-                navigation.navigate('DetailsProduct', {
-                  id: item.id,
-                  name: item.name,
-                  description: item.description,
-                  logo: item.logo,
-                  date_release: item.date_release,
-                  date_revision: item.date_revision,
-                });
-              }}
+              onPress={() => handleNavigate(item)}
             />
           )}
           keyExtractor={item => item.id}
@@ -43,7 +44,7 @@ export const HomeScreen: FC<RootStackScreenProps<'Home'>> = ({navigation}) => {
       <View style={styles.containerButton}>
         <ButtonComponent
           title={'Agregar'}
-          onPress={() => navigation.navigate('AddProduct')}
+          onPress={() => navigation.navigate('AddProduct', {})}
           styleType={'primary'}
         />
       </View>

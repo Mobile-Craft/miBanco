@@ -2372,6 +2372,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/datetimepicker@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "@react-native-community/datetimepicker@npm:8.0.0"
+  dependencies:
+    invariant: ^2.2.4
+  peerDependencies:
+    react: "*"
+    react-native: ^0.73.0
+    react-native-windows: ^0.73.0
+  peerDependenciesMeta:
+    react-native-windows:
+      optional: true
+  checksum: 25292edd5e87d1b71711cd6a961c8ffba884dfa398b8b83b1a5433216bfc77cc49c710c18bb65859a3994274d8cf09b93a12a2a4dee097d8106ad2decdbbc6e1
+  languageName: node
+  linkType: hard
+
 "@react-native/assets-registry@npm:0.74.83":
   version: 0.74.83
   resolution: "@react-native/assets-registry@npm:0.74.83"
@@ -7221,6 +7237,7 @@ __metadata:
     "@babel/preset-env": ^7.20.0
     "@babel/runtime": ^7.20.0
     "@gorhom/bottom-sheet": ^4
+    "@react-native-community/datetimepicker": ^8.0.0
     "@react-native/babel-preset": 0.74.83
     "@react-native/codegen": ^0.74.83
     "@react-native/eslint-config": 0.74.83
@@ -7238,6 +7255,7 @@ __metadata:
     prettier: 2.8.8
     react: 18.2.0
     react-native: 0.74.1
+    react-native-date-picker: ^5.0.2
     react-native-gesture-handler: ^2.16.2
     react-native-reanimated: ^3.11.0
     react-native-safe-area-context: ^4.10.1
@@ -8197,6 +8215,16 @@ __metadata:
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 9d6d111d8990dc98bc5402c1266a808b0459b5d54830bbea24c12d908b536df7883f268a7868cfaedde3dd9d4e0d574db456f84d2e6df9c4526f99bb4b5344d8
+  languageName: node
+  linkType: hard
+
+"react-native-date-picker@npm:^5.0.2":
+  version: 5.0.2
+  resolution: "react-native-date-picker@npm:5.0.2"
+  peerDependencies:
+    react: ">= 17.0.1"
+    react-native: ">= 0.64.3"
+  checksum: 0ec2d14d4306ec618e090347414728b7c152c8c7831683e5699457d25f9c1edbbc25cef2e20d0065d7d83d3b7a4d0833204154fbf87e625844b6fd61904f4748
   languageName: node
   linkType: hard
 

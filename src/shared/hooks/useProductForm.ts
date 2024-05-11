@@ -1,5 +1,17 @@
 import {useState} from 'react';
-import {Product, addProduct} from '../../services/product/ProductService';
+import {
+  Product,
+  addProduct,
+  editProduct,
+  verifyProductId,
+} from '../../services/product/ProductService';
+import {Alert} from 'react-native';
+import {
+  NavigationProp,
+  StackActions,
+  useNavigation,
+} from '@react-navigation/native';
+import {RootStackParamList} from '../../types/stackParamList';
 
 interface FormErrors {
   id?: string;
@@ -9,7 +21,8 @@ interface FormErrors {
   date_release?: string;
   date_revision?: string;
 }
-export const useProductForm = initialState => {
+export const useProductForm = (initialState, isEdit: boolean) => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [formData, setFormData] = useState<Product>(initialState);
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -51,20 +64,40 @@ export const useProductForm = initialState => {
       isValid = false;
     }
 
+    if (!formData.date_revision || formData.date_revision.length === 0) {
+      newErrors.date_revision = 'Fecha no válida!';
+      isValid = false;
+    }
+
     setErrors(newErrors);
     return isValid;
   };
 
   const handleSubmit = async () => {
-    if (validateForm()) {
-      setIsSubmitting(true);
-      try {
-        await addProduct(formData);
-        console.log('Form submitted:', formData);
-      } catch (error) {
-        console.log(formData);
-        console.error('Failed to submit form:', error);
+    if (!validateForm()) return;
+    setIsSubmitting(true);
+    try {
+      const exists = !isEdit && (await verifyProductId(formData.id));
+      if (exists) {
+        Alert.alert('Ups!', 'Este ID de producto ya existe.');
+      } else {
+        isEdit ? await editProduct(formData) : await addProduct(formData);
+        Alert.alert(
+          'Success',
+          isEdit
+            ? 'Producto actualizado exitosamente'
+            : 'Producto agregado exitosamente',
+          [
+            {
+              text: 'OK',
+              onPress: () => navigation.dispatch(StackActions.popToTop),
+            },
+          ],
+        );
       }
+    } catch (error) {
+      Alert.alert('Error', 'Error al enviar los datos.');
+    } finally {
       setIsSubmitting(false);
     }
   };

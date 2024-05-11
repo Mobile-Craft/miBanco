@@ -6,12 +6,19 @@ interface FormFieldProps extends TextInputProps {
   error?: string;
 }
 
-const FormField: FC<FormFieldProps> = ({label, error, ...textInputProps}) => (
+const FormField: FC<FormFieldProps> = ({
+  label,
+  error,
+  style,
+  ...textInputProps
+}) => (
   <View style={styles.container}>
     <Text style={styles.label}>{label}</Text>
     <TextInput
+      autoCapitalize="none"
+      autoCorrect={false}
       placeholder={label}
-      style={[styles.input, error ? styles.inputError : null]}
+      style={[styles.input, error ? styles.inputError : null, style]}
       {...textInputProps}
     />
     {error && <Text style={styles.errorText}>{error}</Text>}

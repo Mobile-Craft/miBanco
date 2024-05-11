@@ -11,24 +11,15 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import BottomSheetComponent from '../components/BottomSheet';
 import {format} from 'date-fns';
-
-export const productDetails = [
-  {label: 'Nombre', info: '[Nombre-registrado]'},
-  {label: 'Descripción', info: '[Descripción-registrada]'},
-  {
-    label: 'Logo',
-    info: 'https://www.visa.com.ec/dam/VCOM/regional/lac/SPA/Default/Pay%20With%20Visa/Tarjetas/visa-signature-400x225.jpg',
-  },
-  {label: 'Fecha liberación', info: '[Fecha-liberación]'},
-  {label: 'Fecha revisión', info: '[Fecha-revisión]'},
-];
+import {useDeleteProduct} from '../../../shared/hooks/useDeleteProduct';
 
 export const DetailsProductScreen: FC<
   RootStackScreenProps<'DetailsProduct'>
 > = ({navigation, route}) => {
-  const product = route.params;
-  console.log(product);
+  const product = route.params?.product;
+  const {deleteProduct} = useDeleteProduct();
   const bottomSheetRef = useRef<BottomSheet>(null);
+
   const handleOpenSheet = () => {
     bottomSheetRef.current?.expand();
   };
@@ -36,7 +27,12 @@ export const DetailsProductScreen: FC<
     bottomSheetRef.current?.close();
   };
   const handleNavigate = () => {
-    navigation.navigate('AddProduct');
+    navigation.navigate('AddProduct', {product});
+  };
+
+  const handleConfirmDelete = () => {
+    deleteProduct(product.id);
+    handleCloseSheet();
   };
 
   const snapPoints = useMemo(() => ['45%'], []);
@@ -57,20 +53,14 @@ export const DetailsProductScreen: FC<
       <Text style={styles.id}>ID: {product.id}</Text>
       <Text style={styles.infoExtra}>Información extra</Text>
 
-      <InfoSection key={product.name} label={'Nombre'} info={product.name} />
+      <InfoSection label={'Nombre'} info={product.name} />
+      <InfoSection label={'Descripción'} info={product.description} />
+      <InfoSection label={'Logo'} info={product.logo} />
       <InfoSection
-        key={product.description}
-        label={'Descripción'}
-        info={product.description}
-      />
-      <InfoSection key={product.logo} label={'Logo'} info={product.logo} />
-      <InfoSection
-        key={product.date_release}
         label={'Fecha de liberación'}
         info={format(new Date(product.date_release), 'P')}
       />
       <InfoSection
-        key={product.date_revision}
         label={'Fecha de revisión'}
         info={format(new Date(product.date_revision), 'P')}
       />
@@ -97,10 +87,9 @@ export const DetailsProductScreen: FC<
         backdropComponent={renderBackdrop}>
         <BottomSheetView style={styles.contentContainer}>
           <BottomSheetComponent
-            onConfirm={() => {
-              console.log('1');
-            }}
+            onConfirm={handleConfirmDelete}
             onCancel={handleCloseSheet}
+            productName={product.name}
           />
         </BottomSheetView>
       </BottomSheet>
