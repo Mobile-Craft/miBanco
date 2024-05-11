@@ -25,7 +25,6 @@ const Item: FC<ItemProps> = ({name, id, onPress, style}) => (
       <Text style={styles.id}>ID: {id}</Text>
     </View>
     <Icon name="chevron-forward-outline" size={25} color={'#c9c9c9'} />
-    {/* <Text style={styles.arrow}>{'>'}</Text> */}
   </TouchableOpacity>
 );
 

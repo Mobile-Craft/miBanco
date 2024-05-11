@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {View, Text, StyleSheet, Pressable} from 'react-native';
 import ButtonComponent from '../../../shared/components/button/ButtonComponent';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 interface BottomSheetProps {
   onConfirm: () => void;
@@ -16,7 +17,7 @@ const BottomSheetComponent: FC<BottomSheetProps> = ({
   return (
     <>
       <Pressable style={styles.close} onPress={onCancel}>
-        <Text>X</Text>
+        <Icon name="close-outline" size={28} color={'#827f7f'} />
       </Pressable>
       <View style={styles.divider} />
       <View style={styles.warningContainer}>
@@ -51,8 +52,7 @@ const styles = StyleSheet.create({
   close: {
     alignSelf: 'flex-end',
     right: 20,
-    paddingVertical: 2,
-    fontSize: 20,
+    paddingVertical: 3,
   },
   warningContainer: {
     paddingHorizontal: 20,

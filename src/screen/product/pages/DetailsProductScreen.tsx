@@ -115,7 +115,7 @@ export const DetailsProductScreen: FC<
         index={-1}
         snapPoints={snapPoints}
         enablePanDownToClose={true}
-        handleIndicatorStyle={{backgroundColor: 'transparent'}}
+        handleIndicatorStyle={{display: 'none'}}
         backdropComponent={renderBackdrop}>
         <BottomSheetView style={styles.contentContainer}>
           <BottomSheetComponent
