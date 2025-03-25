@@ -69,6 +69,14 @@ You've successfully run and modified your React Native App. :partying_face:
 - If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
 - If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
 
+## Screens
+
+![Simulator 1](./example/Simulator1.png)
+![Simulator 2](./example/Simulator%20Screenshot%20-%20iPhone%2014%20Pro%20-%202024-05-11%20at%2013.09.24.png)
+![Simulator 3](./example/Simulator%20Screenshot%20-%20iPhone%2014%20Pro%20-%202024-05-11%20at%2013.09.31.png)
+![Simulator 4](./example/Simulator%20Screenshot%20-%20iPhone%2014%20Pro%20-%202024-05-11%20at%2013.09.36.png)
+![Simulator 5](./example/Simulator%20Screenshot%20-%20iPhone%2014%20Pro%20-%202024-05-11%20at%2013.22.17.png)
+
 # Troubleshooting
 
 If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
