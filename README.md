@@ -71,11 +71,12 @@ You've successfully run and modified your React Native App. :partying_face:
 
 ## Screens
 
-![Simulator 1](./example/Simulator1.png)
-![Simulator 2](./example/Simulator%20Screenshot%20-%20iPhone%2014%20Pro%20-%202024-05-11%20at%2013.09.24.png)
-![Simulator 3](./example/Simulator%20Screenshot%20-%20iPhone%2014%20Pro%20-%202024-05-11%20at%2013.09.31.png)
-![Simulator 4](./example/Simulator%20Screenshot%20-%20iPhone%2014%20Pro%20-%202024-05-11%20at%2013.09.36.png)
-![Simulator 5](./example/Simulator%20Screenshot%20-%20iPhone%2014%20Pro%20-%202024-05-11%20at%2013.22.17.png)
+<img src="./example/Simulator1.png" alt="Simulator 1" width="250"/>
+<img src="./example/Simulator%20Screenshot%20-%20iPhone%2014%20Pro%20-%202024-05-11%20at%2013.09.24.png" alt="Simulator 2" width="250"/>
+<img src="./example/Simulator%20Screenshot%20-%20iPhone%2014%20Pro%20-%202024-05-11%20at%2013.09.31.png" alt="Simulator 3" width="250"/>
+<img src="./example/Simulator%20Screenshot%20-%20iPhone%2014%20Pro%20-%202024-05-11%20at%2013.09.36.png" alt="Simulator 4" width="250"/>
+<img src="./example/Simulator%20Screenshot%20-%20iPhone%2014%20Pro%20-%202024-05-11%20at%2013.22.17.png" alt="Simulator 5" width="250"/>
+
 
 # Troubleshooting
 
